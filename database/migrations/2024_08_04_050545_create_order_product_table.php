@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+       // Migration for order_product pivot table
         Schema::create('order_product', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Khóa chính của bảng trung gian
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade'); // Khóa ngoại liên kết với bảng orders
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // Khóa ngoại liên kết với bảng products
+            $table->integer('quantity'); // Trường lưu trữ số lượng sản phẩm trong đơn hàng
+            $table->timestamps(); // Các cột created_at và updated_at
         });
     }
 
