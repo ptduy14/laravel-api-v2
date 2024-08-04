@@ -60,4 +60,20 @@ class User extends Authenticatable
         'gender' => 'boolean',
         'verify' => 'boolean',
     ];
+
+    /**
+     * Get all the orders for the user.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the cart associated with the user.
+     */
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
 }

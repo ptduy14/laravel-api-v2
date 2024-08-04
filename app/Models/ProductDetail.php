@@ -53,8 +53,8 @@ class ProductDetail extends Model
     /**
      * Get the product that owns the product detail.
      */
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class);
     }
 }

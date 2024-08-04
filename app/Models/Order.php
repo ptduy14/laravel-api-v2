@@ -49,4 +49,22 @@ class Order extends Model
         'total_money' => 'decimal:2',
         'order_date' => 'date',
     ];
+
+    /**
+     * Get the user that owns the order.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all the products associated with the order.
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'order_product')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
 }

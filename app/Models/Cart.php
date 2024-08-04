@@ -42,4 +42,22 @@ class Cart extends Model
     protected $casts = [
         'total_price' => 'decimal:2',
     ];
+
+    /**
+     * Get the user that owns the cart.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all the products associated with the cart.
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'cart_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }

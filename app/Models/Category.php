@@ -42,4 +42,12 @@ class Category extends Model
     protected $casts = [
         'category_status' => 'boolean',
     ];
+
+    /**
+     * Get all the products for the category.
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }
