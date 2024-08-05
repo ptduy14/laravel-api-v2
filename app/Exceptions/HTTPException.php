@@ -35,6 +35,11 @@ class HTTPException extends Exception
         return new self($message, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
+    public static function CONSTRAINT_VIOLATION($message = 'Constraint Violation')
+    {
+        return new self($message, Response::HTTP_BAD_REQUEST);
+    }
+
     public function render($request): JsonResponse {
         return response()->json([
             'status' => $this->getCode(),
