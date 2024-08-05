@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 
-class UpdateUserRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,13 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'email' => 'required|email|max:255|regex:/(.*)@gmail\.com/i|unique:users,email',
             'phone' => 'required|numeric|digits:10',
             'address' => 'required',
             'gender' => 'required|boolean',
-            'role' => 'required|string',
-            'verify' => 'required|boolean',
+            // 'role' => 'required|boolean',
+            // 'verify' => 'required|boolean',
+            'password' => 'required | confirmed'
         ];
     }
 

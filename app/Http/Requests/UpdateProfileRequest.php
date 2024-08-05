@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 
-class FormLoginRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,13 @@ class FormLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|max:255|regex:/(.*)@gmail\.com/i',
-            'password' => 'required'
+            'name' => 'required',
+            'phone' => 'required|numeric|digits:10',
+            'address' => 'required',
+            'gender' => 'required|boolean',
+            // 'role' => 'required|boolean',
+            // 'verify' => 'required|boolean',
+            // 'password' => 'required | confirmed'
         ];
     }
 

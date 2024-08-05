@@ -30,8 +30,8 @@ class CreateUserRequest extends FormRequest
             'phone' => 'required|numeric|digits:10',
             'address' => 'required',
             'gender' => 'required|boolean',
-            // 'role' => 'required|boolean',
-            // 'verify' => 'required|boolean',
+            'role' => 'required|string',
+            'verify' => 'required|boolean',
             'password' => 'required | confirmed'
         ];
     }
