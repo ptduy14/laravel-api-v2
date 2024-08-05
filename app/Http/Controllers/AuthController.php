@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Exceptions\HTTPException;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\FormLoginRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash; 
 use DB;
 
 class AuthController extends Controller
@@ -24,7 +27,7 @@ class AuthController extends Controller
         *         response=200,
         *         description="Successfully retrieved user information",
         *         @OA\JsonContent(
-        *             @OA\Property(property="message", type="object"),
+        *             @OA\Property(property="message", type="string"),
         *             @OA\Property(property="data", type="object")
         *         )
         *     ),
@@ -192,9 +195,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+            throw HTTPException::UNAUTHORIZED();
         }
 
         $user = Auth::user();
@@ -229,9 +230,9 @@ class AuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="User information updated successfully",
+     *         description="Change password successfully",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="User information updated successfully"),
+     *             @OA\Property(property="message", type="string", example="Change password successfully"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     ),
@@ -278,6 +279,79 @@ class AuthController extends Controller
                 'data' => new UserResource($user)
             ], 200);
             
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Update failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/api/auth/change-password",
+     *     summary="Change password",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"password", "new_password"},
+     *             @OA\Property(property="password", type="password", example="aaaa"),
+     *             @OA\Property(property="new_password", type="password", example="aaaaa"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User information updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Change password successfully"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=422),
+     *             @OA\Property(property="error", type="string", example="Validation Error"),
+     *             @OA\Property(property="message", type="string", example="Validation errors occurred"),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
+     */
+    public function changePassword(ChangePasswordRequest $request) {
+        $request->validated();
+        
+        $user = Auth::user();
+
+        if (!Hash::check($request->input('password'), $user->password)) {
+            return response()->json([
+                'message' => 'Current password is incorrect'
+            ], 401);
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            // Update the user's password
+            $user->update(['password' => Hash::make($request->input('new_password'))]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Change password Successfully'
+            ], 200);
+
         } catch (\Exception $e) {
             DB::rollBack();
 
