@@ -41,7 +41,7 @@ class CartController extends Controller
         $user = Auth::user();
 
         if (!$user->cart) {
-           throw HTTPException::BAD_REQUEST('User not have any product in cart');
+           throw HTTPException::NOT_FOUND('Cart not found');
         }
 
         return response()->json([
@@ -86,7 +86,7 @@ class CartController extends Controller
         $product = Product::find($request->product_id);
 
         if (!$product) {
-            throw HTTPException::NOT_FOUND();
+            throw HTTPException::NOT_FOUND('Product not found');
         }
 
         try {
@@ -207,7 +207,7 @@ class CartController extends Controller
             $cart = $user->cart;
         
             if (!$cart) {
-               throw HTTPException::BAD_REQUEST('User not have any product in cart');
+                throw HTTPException::NOT_FOUND('Cart not found');
             }
 
             $totalQuantityCart = $cart->total_quantity;
@@ -249,14 +249,86 @@ class CartController extends Controller
 
             DB::commit();
             return response()->json([
-                'status' => 200,
                 'message' => 'Cart updated successfully',
                 'data' => new CartResource($cart)
-            ]);
+            ], 200);
 
         } catch (\Exeption $e) {
             DB::rollBack();
     
+            return response()->json([
+                'message' => 'Update product cart failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }  
+
+    /**
+        * @OA\Delete(
+        *     path="/api/carts/products/{id}",
+        *     summary="Delete product cart",
+        *     tags={"Carts"},
+        *     security={{"bearerAuth":{}}},  
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/getById" 
+        *     ),
+        *     @OA\Response(
+        *         response=200,
+        *         description="Delete product successfully",
+        *         @OA\JsonContent(
+        *             @OA\Property(property="message", type="string"),
+        *             @OA\Property(property="data", type="object")
+        *         )
+        *     ),
+        *     @OA\Response(
+        *         response=404,
+        *         description="Resource not found",
+        *         @OA\JsonContent(
+        *             @OA\Property(property="message", type="string", example="Resource not found")
+        *         )
+        *     )
+        * )
+    */
+    public function deleteProductCart($id) {
+        $user = Auth::user();
+        $cart = $user->cart;
+        
+        if (!$user->cart) {
+            throw HTTPException::NOT_FOUND('Cart not found');
+        }
+
+        $product = $cart->products()->find($id);
+
+        if (!$product) {
+            throw HTTPException::NOT_FOUND('Product not found');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $totalQuantityCart = $cart->total_quantity;
+            $totalPriceCart = $cart->total_price;
+
+            $quantityProductRemove = $cart->products()->where('product_id', $product->id)->first()->pivot->quantity;
+
+            $totalQuantityCart -= $quantityProductRemove;
+            $totalPriceCart -= $product->product_price * $quantityProductRemove;
+
+            $cart->products()->detach($product->id);
+            $cart->update([
+                'total_quantity' => $totalQuantityCart,
+                'total_price' => $totalPriceCart
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Product cart delete successfully',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'message' => 'Update product cart failed',
                 'error' => $e->getMessage(),
