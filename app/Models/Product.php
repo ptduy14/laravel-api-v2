@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -30,7 +33,7 @@ class Product extends Model
      */
     protected $fillable = [
         'product_name',
-        'price',
+        'product_price',
         'product_status',
         'category_id',
     ];
@@ -41,7 +44,7 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'price' => 'decimal:2',
+        'product_price' => 'integer',
         'product_status' => 'boolean',
     ];
 
@@ -56,7 +59,7 @@ class Product extends Model
     /**
      * Get the product detail associated with the product.
      */
-    public function productDetail(): HasOne
+    public function detail(): HasOne
     {
         return $this->hasOne(ProductDetail::class);
     }

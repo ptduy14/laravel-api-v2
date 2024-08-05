@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
         for ($i = 1; $i <= 20; $i++) {
             $products[] = [
                 'product_name' => 'Product ' . $i,
-                'price' => rand(1000, 5000), // Giá ngẫu nhiên từ 1000 đến 5000
+                'product_price' => rand(1000, 5000), // Giá ngẫu nhiên từ 1000 đến 5000
                 'product_status' => rand(0, 1), // Trạng thái ngẫu nhiên 0 hoặc 1
                 'category_id' => $categories->random()->id, // Chọn ngẫu nhiên một category_id
                 'created_at' => now(),
