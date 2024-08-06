@@ -1,66 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel API
+An e-commerce API developed using the Laravel Framework, following REST architectural standards. This project includes features such as user authentication with JWT, role-based access control, resource management, and support for various CRUD operations.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a>
 
-## About Laravel
+## Introduction
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project is a simple e-commerce API designed to manage users, products, orders, and authentication. It is built with the Laravel framework, leveraging JWT for secure authentication. Through this project, I have practiced writing APIs following REST architecture and gained deeper insights into backend development. The project will continue to be updated and improved over time (if I find the time 😅), but sure I will do that.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This is the second version of the project with many changes and improvements in authentication, endpoints, methods, and more. All changes are detailed below, and you can view the original project https://github.com/ptduy14/laravel-api.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## New Change
+- Added Swagger for API documentation.
+- Switched authentication to Sanctum for simpler token issuance without relying on external packages.
+- Customized HTTP exceptions.
+- Adjusted endpoint URLs for better user-friendliness.
+- Fixed bugs in the cart module (update cart).
+- Resolved authentication issues.
+- Added enums to define order statuses.
 
-## Learning Laravel
+## API Endpoints
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Authentication
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Register: `POST /auth/register`
+- Login: `POST /auth/login`
+- Get Me: `GET /auth/me` (requires auth:sanctum middleware)
+- Logout: `GET /auth/logout` (requires auth:sanctum middleware)
+- Update Profile: `PATCH /auth/update` (requires auth:sanctum middleware)
+- Change Password: `PATCH /auth/change-password` (requires auth:sanctum middleware)
 
-## Laravel Sponsors
+## Users
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Get All Users: `GET /users` (requires role:admin|super-admin middleware)
+- Get User by ID: `GET /users/{id}` (requires role:admin|super-admin middleware)
+- Create User: `POST /users` (requires role:admin|super-admin middleware)
+- Update User: `PATCH /users/{id}` (requires role:admin|super-admin middleware)
+- Delete User: `DELETE /users/{id}` (requires role:admin|super-admin middleware)
 
-### Premium Partners
+### User Orders (requires role:user middleware)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- Get User Orders: `GET /users/orders`
+- Get User Order by ID: `GET /users/orders/{id}`
+- Create User Order: `POST /users/orders`
 
-## Contributing
+### Carts (requires role:user middleware)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Get Current Carts: `GET /carts`
+- Add Product to Cart: `POST /carts/products`
+- Update Products in Cart: `PATCH /carts/products`
+- Delete Product from Cart: `DELETE /carts/products/{id}`
 
-## Code of Conduct
+### Categories
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Get All Categories: `GET /categories`
+- Get Category by ID: `GET /categories/{id}`
+- Create Category: `POST /categories` (requires role:admin|super-admin middleware)
+- Update Category: `PATCH /categories/{id}` (requires role:admin|super-admin middleware)
+- Delete Category: `DELETE /categories/{id}` (requires role:admin|super-admin middleware)
+- Get Products of Category: `GET /categories/{id}/products`
 
-## Security Vulnerabilities
+Products
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Get All Products: `GET /products`
+- Get Product by ID: `GET /products/{id}`
+- Create Product: `POST /products` (requires role:admin|super-admin middleware)
+- Update Product: `PATCH /products/{id}` (requires role:admin|super-admin middleware)
+- Delete Product: `DELETE /products/{id}` (requires role:admin|super-admin middleware)
+- Get Product Detail: `GET /products/{id}/details`
 
-## License
+### Product Details (requires role:admin|super-admin middleware)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Create Product Detail: `POST /products/{id}/detail`
+- Update Product Detail: `PATCH /products/{id}/detail`
+- Delete Product Detail: `DELETE /products/{id}/detail`
+
+### Orders
+
+- Get All Orders: `GET /orders` (requires role:admin|super-admin middleware)
+- Update Order Status: `PATCH /orders/{id}` (requires role:admin|super-admin middleware)
+
+### Middleware:
+
+- `auth:api`: Use Passport for OAuth2 authentication..
+- `auth:jwt`:Use JWT for authentication.
+- `role`:Check the user's permissions, for example `role:super-admin`, `role:admin|super-admin`, `role:user`
