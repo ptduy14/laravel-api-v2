@@ -135,7 +135,7 @@ class ProductDetailController extends Controller
      *     )
      * )
      */
-    public function create($id, CreateProductDetailRequest $request) {
+    public function createProductDetail($id, CreateProductDetailRequest $request) {
         $product = Product::find($id);
 
         if (!$product) {
@@ -280,7 +280,7 @@ class ProductDetailController extends Controller
      *     )
      * )
      */
-    public function update($id, UpdateProductDetailRequest $request) {
+    public function updateProductDetail($id, UpdateProductDetailRequest $request) {
         $product = Product::find($id);
     
         if (!$product) {
@@ -384,7 +384,7 @@ class ProductDetailController extends Controller
      *     )
      * )
      */
-    public function delete($id) {
+    public function deleteProductDetail($id) {
         $product = Product::find($id);
 
         if (!$product) {

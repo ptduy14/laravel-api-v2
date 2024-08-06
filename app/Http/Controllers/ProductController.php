@@ -36,7 +36,7 @@ class ProductController extends Controller
         *     )
         * )
     */
-    public function getAll() {
+    public function getAllProducts() {
         $products = Product::all();
 
         if (!$products) {
@@ -74,7 +74,7 @@ class ProductController extends Controller
         *     )
         * )
     */
-    public function getById($id) {
+    public function getProduct($id) {
         $product = Product::find($id);
         
         if (!$product) {
@@ -180,7 +180,7 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function create(CreateProductRequest $request) {
+    public function createProduct(CreateProductRequest $request) {
         $request->validated();
 
         $category = Category::find($request->input('category_id'));
@@ -312,7 +312,7 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function update(UpdateProductRequest $request, $id) {
+    public function updateProduct(UpdateProductRequest $request, $id) {
         $product = Product::find($id);
         
         if (!$product) {
@@ -409,7 +409,7 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function delete($id) {
+    public function deleteProduct($id) {
         $product = Product::find($id);
 
         if (!$product) {

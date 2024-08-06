@@ -7,9 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Exceptions\HTTPException;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\FormLoginRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash; 
@@ -121,7 +121,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(CreateUserRequest $request) {
+    public function register(RegisterRequest $request) {
         $request->validated();
     
         try {
@@ -189,7 +189,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function login(FormLoginRequest $request) {
+    public function login(LoginRequest $request) {
         $request->validated();
     
         $credentials = request(['email', 'password']);
@@ -213,7 +213,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/auth/update",
      *     summary="Update user information",
      *     tags={"Auth"},
@@ -255,7 +255,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function update(UpdateUserRequest $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
         $request->validated();
 

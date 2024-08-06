@@ -33,7 +33,7 @@ class UserController extends Controller
         *     )
         * )
     */
-    public function getAll() {
+    public function getAllUsers() {
         $users = User::all();
 
         return response()->json([
@@ -68,11 +68,11 @@ class UserController extends Controller
         *     )
         * )
     */
-    public function getById($id) {
+    public function getUser($id) {
         $user = User::find($id);
 
         if (!$user) {
-            throw HTTPException::NOT_FOUND();
+            throw HTTPException::NOT_FOUND('User not found');
         }
 
         return response()->json([
@@ -161,7 +161,7 @@ class UserController extends Controller
      *     )
      * )
      */
-     public function create(CreateUserRequest $request) {
+     public function createUser(CreateUserRequest $request) {
         $request->validated();
 
         try {
@@ -197,7 +197,7 @@ class UserController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *     path="/api/users/{id}",
      *     tags={"Users"},
      *     summary="Update user information",
@@ -268,7 +268,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function update(UpdateUserRequest $request, $id) {
+    public function updateUser(UpdateUserRequest $request, $id) {
         $user = User::find($id);
 
         if (!$user) {
@@ -321,13 +321,7 @@ class UserController extends Controller
      *     summary="Delete a user",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="User ID to delete",
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
+     *         ref="#/components/parameters/getById" 
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -375,7 +369,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function delete($id) {
+    public function deleteUser($id) { // will refactor to soft delete later
         $user = User::find($id);
         if (!$user) {
             throw HTTPException::NOT_FOUND('User not found');

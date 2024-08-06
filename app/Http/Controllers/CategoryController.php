@@ -36,7 +36,7 @@ class CategoryController extends Controller
         *     )
         * )
     */
-    public function getAll() {
+    public function getAllCategories() {
         $categories = Category::all();
 
         if (!$categories) {
@@ -74,7 +74,7 @@ class CategoryController extends Controller
         *     )
         * )
     */
-    public function getById($id) {
+    public function getCategory($id) {
         $category = Category::find($id);
         
         if (!$category) {
@@ -208,7 +208,7 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function create(CreateCategoryRequest $request) {
+    public function createCategory(CreateCategoryRequest $request) {
         $request->validated();
 
         try {
@@ -338,7 +338,7 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function update(UpdateCategoryRequest $request, $id) {
+    public function updateCategory(UpdateCategoryRequest $request, $id) {
         $category = Category::find($id);
 
         if (!$category) {
@@ -433,7 +433,7 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function delete($id) {
+    public function deleteCategory($id) {
         $category = Category::find($id);
         if (!$category) {
             throw HTTPException::NOT_FOUND();

@@ -6,9 +6,9 @@ namespace App\Http\Controllers;
 *   @OA\Info(
 *     version="1.0.0",
 *     title="Laravel API Documentation",
-*     description="API Documentation for your project",
+*     description="API Documentation for e-commerce",
 *     @OA\Contact(
-*         email="your-email@example.com"
+*         email="phantanduy14@example.com"
 *     )
 *   )
 *   @OA\SecurityScheme(
@@ -18,6 +18,17 @@ namespace App\Http\Controllers;
 *     type="http",
 *     scheme="bearer",
 *     bearerFormat="JWT",
+*   ),
+*
+*   @OA\Parameter(
+*     parameter="getById",
+*     in="path",
+*     name="id",
+*     description="Default 1",
+*     @OA\Schema(
+*         type="integer",
+*         default=1,
+*     )
 *   ),
 */
 
