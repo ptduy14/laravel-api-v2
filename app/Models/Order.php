@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
@@ -28,7 +30,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable = [  
         'reciver',
         'phone',
         'address',
@@ -38,6 +40,7 @@ class Order extends Model
         'method_payment',
         'total_quantity',
         'user_id',
+        'order_status_desc'
     ];
 
     /**
@@ -46,7 +49,7 @@ class Order extends Model
      * @var array
      */
     protected $casts = [
-        'total_money' => 'decimal:2',
+        'total_money' => 'integer',
         'order_date' => 'date',
     ];
 
