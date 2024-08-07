@@ -44,7 +44,7 @@ class ProductController extends Controller
         }
 
         return response()->json([
-            'message' => 'The action is done successfully',
+            'message' => 'Get products successfully',
             'data' => ProductResource::collection($products)
         ], 200);
     }

@@ -89,6 +89,10 @@ class CartController extends Controller
             throw HTTPException::NOT_FOUND('Product not found');
         }
 
+        if (!$product->product_status) {
+            throw HTTPException::BAD_REQUEST('Product was inactived');
+        }
+
         try {
             DB::beginTransaction();
 
