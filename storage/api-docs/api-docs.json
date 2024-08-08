@@ -155,20 +155,14 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Account registered successfully",
+                        "description": "Account registered successfully, check the email for active",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Account registered successfully"
-                                        },
-                                        "access_token": {
-                                            "type": "string"
-                                        },
-                                        "data": {
-                                            "type": "object"
+                                            "example": "Account registered successfully, check the email for active"
                                         }
                                     },
                                     "type": "object"

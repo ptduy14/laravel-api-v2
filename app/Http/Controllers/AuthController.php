@@ -13,6 +13,9 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash; 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserActivationEmail;
 use DB;
 
 class AuthController extends Controller
@@ -73,6 +76,10 @@ class AuthController extends Controller
     
     public function logout(Request $request) {
             $user = Auth::user();
+
+            if ($user->verify) {
+                throw HTTPException::FORBIDDEN('User is inactive');
+            }
             
             // Xóa tất cả các token của người dùng hiện tại
             $user->tokens()->delete();
@@ -102,11 +109,9 @@ class AuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Account registered successfully",
+     *         description="Account registered successfully, check the email for active",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Account registered successfully"),
-     *             @OA\Property(property="access_token", type="string"),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="message", type="string", example="Account registered successfully, check the email for active"),
      *         )
      *     ),
      *     @OA\Response(
@@ -137,15 +142,19 @@ class AuthController extends Controller
             ]);
     
             $user->assignRole('user');
-
-            $token = $user->createToken('access_token')->plainTextToken;
     
             DB::commit();
-    
+
+            $secretKey = env('SECRET_HASH_TOKEN_ACTIVITION');
+            $string = $user->email." ".$secretKey;
+
+            $tokenActivition = Crypt::encrypt($string);
+
+            // The email sending is done using the to method on the Mail facade
+            Mail::to($user->email)->send(new UserActivationEmail($user->name, $tokenActivition));
+
             return response()->json([
-                'message' => 'Account registered successfully',
-                'access_token' => $token,
-                'data' => new UserResource($user)
+                'message' => 'Account registered successfully, check the email for active',
             ], 201);
     
         } catch (\Exception $e) {
@@ -360,5 +369,23 @@ class AuthController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function activeUser($token) {
+        $email = Crypt::decrypt($token);
+      
+        $user = User::where('email', explode(" ",$email)[0])->first();
+
+        if (!$user) {
+            throw HTTPException::BAD_REQUEST('Invalid activition token');
+        }
+
+        if ($user->verify) {
+            throw HTTPException::BAD_REQUEST('User already actived');            
+        }
+
+        $userUpdated = $user->update(['verify' => true]);
+
+        return response()->json(['message' => 'User activated successfully.'], 200);
     }
 }
