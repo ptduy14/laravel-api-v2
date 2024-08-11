@@ -2,15 +2,26 @@ version: '3.8'
 
 services:
   app:
-    image: wyveo/nginx-php-fpm:php82
-    container_name: nginx-php-fpm
-    ports:
-      - "8080:80"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: larave-api-app
+    restart: unless-stopped
+    working_dir: /var/www/
     volumes:
-      - .:/usr/share/nginx/html # Đảm bảo mã nguồn Laravel nằm trong thư mục này
-      - ./docker/nginx_log:/var/log/nginx # Thư mục log của Nginx
-      - ./docker/php-fpm:/var/log/php-fpm.log # Thư mục log của PHP-FPM
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf # Cấu hình Nginx
+      - .:/var/www
+    networks:
+      - app-network
+  
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./nginx_config/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app-network
 
@@ -20,7 +31,7 @@ services:
       - mysql_data:/var/lib/mysql
     container_name: mysql-db
     environment:
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: laravel-api
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
