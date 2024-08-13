@@ -17,6 +17,7 @@ This is the second version of the project with many changes and improvements in 
 - Fixed bugs in the cart module (update cart).
 - Resolved authentication issues.
 - Added enums to define order statuses.
+-  Added Docker Support (Integrated Docker to simplify setting up development environments and deployment).
 
 ## API Endpoints
 
