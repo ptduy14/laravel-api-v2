@@ -742,6 +742,17 @@
                 ],
                 "summary": "Get categories",
                 "operationId": "5ca158e3fb5172681bc3212088131f1e",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/search"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Get categories successfully",

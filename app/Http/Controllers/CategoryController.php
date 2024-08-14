@@ -19,6 +19,15 @@ class CategoryController extends Controller
         *     path="/api/categories",
         *     summary="Get categories",
         *     tags={"Categories"},
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/page" 
+        *     ),
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/limit" 
+        *     ),
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/search" 
+        *     ),
         *     @OA\Response(
         *         response=200,
         *         description="Get categories successfully",
@@ -36,16 +45,27 @@ class CategoryController extends Controller
         *     )
         * )
     */
-    public function getAllCategories() {
-        $categories = Category::all();
+    public function getAllCategories(Request $request) {
 
-        if (!$categories) {
+        $queryParams = handleQueryParameter($request);
+
+        $categories = Category::when($queryParams['search'], function($query, $search) {
+            return $query->where('category_name', 'like', '%'.$search.'%');
+        })->paginate($queryParams['limit']);
+
+        if ($categories->isEmpty()) {
             throw HTTPException::NOT_FOUND();
         }
 
         return response()->json([
             'message' => 'Get categories successfully',
-            'data' => CategoryResource::collection($categories)
+            'data' => CategoryResource::collection($categories),
+            'pagination' => [
+                'current_page' => $categories->currentPage(),
+                'total_pages' => $categories->lastPage(),
+                'total_items' => $categories->total(),
+                'per_page' => $categories->perPage(),
+            ]
         ], 200);
     }
 
