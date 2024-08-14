@@ -1,13 +1,19 @@
 # Laravel API
 An e-commerce API developed using the Laravel Framework, following REST architectural standards. This project includes features such as user authentication with JWT, role-based access control, resource management, and support for various CRUD operations.
 
-<a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a>
+<a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="" alt="Laravel Logo"></a>
 
 ## Introduction
 
 This project is a simple e-commerce API designed to manage users, products, orders, and authentication. It is built with the Laravel framework, leveraging JWT for secure authentication. Through this project, I have practiced writing APIs following REST architecture and gained deeper insights into backend development. The project will continue to be updated and improved over time (if I find the time 😅), but sure I will do that.
 
 This is the second version of the project with many changes and improvements in authentication, endpoints, methods, and more. All changes are detailed below, and you can view the original project https://github.com/ptduy14/laravel-api.
+
+`OVERVIEW`
+<img src="./public/img/first-look.png" alt="first-look">
+
+`GET PRODUCTS`
+<img src="./public/img/example.png" alt="products">
 
 ## New Change
 - Added Swagger for API documentation.
@@ -16,8 +22,9 @@ This is the second version of the project with many changes and improvements in 
 - Adjusted endpoint URLs for better user-friendliness.
 - Fixed bugs in the cart module (update cart).
 - Resolved authentication issues.
+- Pagination and searching.
 - Added enums to define order statuses.
--  Added Docker Support (Integrated Docker to simplify setting up development environments and deployment).
+- Added Docker Support (Integrated Docker to simplify setting up development environments and deployment).
 
 ## API Endpoints
 
