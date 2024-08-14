@@ -1626,6 +1626,17 @@
                 ],
                 "summary": "Get products",
                 "operationId": "9e289d6b0d7637b34630d235f1cea155",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/search"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Get products successfully",
@@ -2861,6 +2872,30 @@
                 "schema": {
                     "type": "integer",
                     "default": 1
+                }
+            },
+            "page": {
+                "name": "page",
+                "in": "query",
+                "schema": {
+                    "type": "integer",
+                    "default": 1
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "query",
+                "schema": {
+                    "type": "integer",
+                    "default": 5
+                }
+            },
+            "search": {
+                "name": "search",
+                "in": "query",
+                "schema": {
+                    "type": "string",
+                    "default": ""
                 }
             }
         },

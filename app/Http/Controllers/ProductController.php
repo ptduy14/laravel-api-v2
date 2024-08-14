@@ -19,6 +19,15 @@ class ProductController extends Controller
         *     path="/api/products",
         *     summary="Get products",
         *     tags={"Products"},
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/page" 
+        *     ),
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/limit" 
+        *     ),
+        *     @OA\Parameter(
+        *         ref="#/components/parameters/search" 
+        *     ),
         *     @OA\Response(
         *         response=200,
         *         description="Get products successfully",
@@ -36,16 +45,27 @@ class ProductController extends Controller
         *     )
         * )
     */
-    public function getAllProducts() {
-        $products = Product::all();
+    public function getAllProducts(Request $request) {
 
-        if (!$products) {
+        $queryParams = handleQueryParameter($request);
+
+        $products = Product::when($queryParams['search'], function($query, $search) {
+            return $query->where('product_name', 'like', '%'.$search.'%');
+        })->paginate($queryParams['limit']);
+
+        if ($products->isEmpty()) {
             throw HTTPException::NOT_FOUND();
         }
 
         return response()->json([
             'message' => 'Get products successfully',
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection($products),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'total_pages' => $products->lastPage(),
+                'total_items' => $products->total(),
+                'per_page' => $products->perPage(),
+            ]
         ], 200);
     }
 

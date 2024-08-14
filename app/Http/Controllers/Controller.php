@@ -30,6 +30,35 @@ namespace App\Http\Controllers;
 *         default=1,
 *     )
 *   ),
+
+*   // for query
+*   @OA\Parameter(
+*     parameter="page",
+*     in="query",
+*     name="page",
+*     @OA\Schema(
+*         type="integer",
+*         default=1,
+*     )
+*   ),
+*   @OA\Parameter(
+*     parameter="limit",
+*     in="query",
+*     name="limit",
+*     @OA\Schema(
+*         type="integer",
+*         default=5,
+*     )
+*   ),
+*   @OA\Parameter(
+*     parameter="search",
+*     in="query",
+*     name="search",
+*     @OA\Schema(
+*         type="string",
+*         default="",
+*     )
+*   ),
 */
 
 abstract class Controller
