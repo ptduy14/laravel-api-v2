@@ -1,7 +1,8 @@
 # Laravel API
 An e-commerce API developed using the Laravel Framework, following REST architectural standards. This project includes features such as user authentication with JWT, role-based access control, resource management, and support for various CRUD operations.
 
-<a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="" alt="Laravel Logo"></a>
+<a href="https://laravel.com" target="_blank">
+<img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="" alt="Laravel Logo"></a>
 
 ## Introduction
 
@@ -9,11 +10,15 @@ This project is a simple e-commerce API designed to manage users, products, orde
 
 This is the second version of the project with many changes and improvements in authentication, endpoints, methods, and more. All changes are detailed below, and you can view the original project https://github.com/ptduy14/laravel-api.
 
-`OVERVIEW`
-<img src="./public/img/first-look.png" alt="first-look">
+<b>OVERVIEW</b>
 
-`GET PRODUCTS`
-<img src="./public/img/example.png" alt="products">
+![first-look](https://github.com/user-attachments/assets/42a6be16-a557-4098-b8d9-20fd7ea97da0)
+
+
+<b>GET PRODUCTS</b>
+
+![example](https://github.com/user-attachments/assets/b78d50a8-f763-4e64-85b0-f2097cdf5501)
+
 
 ## New Change
 - Added Swagger for API documentation.
