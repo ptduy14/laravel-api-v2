@@ -33,12 +33,27 @@ class UserController extends Controller
         *     )
         * )
     */
-    public function getAllUsers() {
-        $users = User::all();
+    public function getAllUsers(Request $request) {
+
+        $queryParams = handleQueryParameter($request);
+
+        $users = User::when($queryParams['search'], function($query, $search) {
+            return $query->where('name', 'like', '%'.$search.'%');
+        })->paginate($queryParams['limit']);
+
+        if ($users->isEmpty()) {
+            throw HTTPException::NOT_FOUND();
+        }
 
         return response()->json([
             'message' => 'Get users successfully',
             'data' => UserResource::collection($users),
+            'pagination' => [
+                'current_page' => $users->currentPage(),
+                'total_pages' => $users->lastPage(),
+                'total_items' => $users->total(),
+                'per_page' => $users->perPage(),
+            ]
         ], 200);
     }
 
