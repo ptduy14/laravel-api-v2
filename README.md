@@ -30,6 +30,7 @@ This is the second version of the project with many changes and improvements in 
 - Pagination and searching.
 - Added enums to define order statuses.
 - Added Docker Support (Integrated Docker to simplify setting up development environments and deployment).
+- Added CORS config.
 
 ## API Endpoints
 
